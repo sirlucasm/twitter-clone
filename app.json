@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "twitter-clone",
+    "slug": "twitter-clone",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icons/twitter-icon-circle.png",
+    "splash": {
+      "image": "./assets/icons/twitter-icon-circle.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1da1f2"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icons/twitter-icon-circle.png",
+        "backgroundColor": "#1da1f2"
+      }
+    },
+    "web": {
+      "favicon": "./assets/icons/twitter-icon-circle.png"
+    }
+  }
+}
