@@ -1,5 +1,6 @@
 import Index from './src';
+import { AuthProvider } from './src/contexts/Auth';
 
 export default function App() {
-  return <Index />
+  return <AuthProvider><Index /></AuthProvider>;
 };

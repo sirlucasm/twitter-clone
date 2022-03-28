@@ -1,10 +1,18 @@
 import { NavigationContainer } from '@react-navigation/native';
-import StackRoute from './stack';
+import { useAuth } from '../contexts/Auth';
+import MainStackRoute from './stack';
+import TabRoute from './tab';
 
 const Routes = () => {
+  const { signed } = useAuth();
   return (
     <NavigationContainer>
-      <StackRoute />
+      {
+        signed ?
+        <TabRoute />
+        :
+        <MainStackRoute />
+      }
     </NavigationContainer>
   );
 }

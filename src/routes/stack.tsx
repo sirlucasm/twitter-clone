@@ -5,7 +5,7 @@ import Welcome from '../screens';
 import SignIn from '../screens/auth/signin';
 import SignUp from '../screens/auth/signup';
 
-const StackRoute = () => {
+const MainStackRoute = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -33,4 +33,4 @@ const StackRoute = () => {
   );
 };
 
-export default StackRoute;
+export default MainStackRoute;
