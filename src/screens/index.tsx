@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     paddingTop: 60,
   },
   titleArea: {
-    marginVertical: normalize(160, 'height'),
+    marginVertical: normalize(120, 'height'),
   },
   title: {
     textAlign: 'center',

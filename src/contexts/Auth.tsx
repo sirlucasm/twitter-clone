@@ -15,6 +15,13 @@ const AuthContext = createContext({} as AuthContextProps);
 
 export const AuthProvider = ({ children }: any) => {
   const [currentUser, setCurrentUser] = useState<IUser | null>(null);
+  const user: IUser = {
+    name: 'Conta Teste',
+    username: 'teste',
+    email: 'teste@gmail.com',
+    password: '123456',
+    phone_number: '82999999999'
+  };
 
   const signIn = async ({ identifier, password }: IUserSignIn) => {
     if (
@@ -23,13 +30,6 @@ export const AuthProvider = ({ children }: any) => {
       identifier === 'teste'
     ) {
       if (password === '123456') {
-        const user: IUser = {
-          name: 'Conta Teste',
-          username: 'teste',
-          email: 'teste@gmail.com',
-          password: '123456',
-          phone_number: '82999999999'
-        };
         setCurrentUser(user);
         await AsyncStorage.setItem('twitter.currentUser', JSON.stringify(user));
       }
@@ -41,8 +41,9 @@ export const AuthProvider = ({ children }: any) => {
     await AsyncStorage.removeItem('twitter.currentUser');
   }
 
-  const signUp = () => {
-
+  const signUp = async () => {
+    setCurrentUser(user);
+    await AsyncStorage.setItem('twitter.currentUser', JSON.stringify(user));
   }
 
   useEffect(() => {

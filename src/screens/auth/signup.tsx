@@ -2,8 +2,11 @@ import { Image, StyleSheet, Text, TouchableOpacity, View, SafeAreaView } from 'r
 import normalize from 'react-native-normalize';
 import { Formik } from 'formik';
 import { Input, Button } from 'react-native-elements';
+import signUpSchema from '../../validations/signUpSchema';
+import { useAuth } from '../../contexts/Auth';
 
 export default function SignUp() {
+  const { signUp } = useAuth();
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -15,9 +18,10 @@ export default function SignUp() {
       <View style={styles.formArea}>
         <Formik
           initialValues={{ name: '', username: '', email: '', password: '' }}
-          onSubmit={values => console.log(values)}
+          onSubmit={signUp}
+          validationSchema={signUpSchema}
         >
-          {({ handleChange, handleBlur, handleSubmit, values }) => (
+          {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid }) => (
             <>
               <Input
                 placeholder='Nome'
@@ -25,6 +29,7 @@ export default function SignUp() {
                 onChangeText={handleChange('name')}
                 onBlur={handleBlur('name')}
                 value={values.name}
+                errorMessage={touched.name ? errors.name : ''}
               />
               <Input
                 placeholder='Usuário'
@@ -32,6 +37,7 @@ export default function SignUp() {
                 onChangeText={handleChange('username')}
                 onBlur={handleBlur('username')}
                 value={values.username}
+                errorMessage={touched.username ? errors.username : ''}
               />
               <Input
                 placeholder='Email'
@@ -39,6 +45,7 @@ export default function SignUp() {
                 onChangeText={handleChange('email')}
                 onBlur={handleBlur('email')}
                 value={values.email}
+                errorMessage={touched.email ? errors.email : ''}
               />
               <Input
                 placeholder='Senha'
@@ -47,6 +54,7 @@ export default function SignUp() {
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
                 value={values.password}
+                errorMessage={touched.password ? errors.password : ''}
               />
               <View style={styles.formBtnArea}>
                 <View></View>
@@ -54,6 +62,7 @@ export default function SignUp() {
                   onPress={handleSubmit}
                   title='Criar conta'
                   buttonStyle={styles.formBtn}
+                  disabled={!isValid}
                 />
               </View>
             </>
