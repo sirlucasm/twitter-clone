@@ -59,7 +59,7 @@ export default function SignUp() {
               <View style={styles.formBtnArea}>
                 <View></View>
                 <Button
-                  onPress={handleSubmit}
+                  onPress={(e: any) => handleSubmit(e)}
                   title='Criar conta'
                   buttonStyle={styles.formBtn}
                   disabled={!isValid}

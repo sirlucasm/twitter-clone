@@ -1,58 +1,55 @@
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
-import { IUser, IUserSignIn } from "../types/user.types";
+import { ICurrentUser, IUser, IUserSignIn } from "../@types/user.types";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import UserService from "../api/services/UserService";
 
 type AuthContextProps = {
   signed: boolean;
-  currentUser: IUser | null;
-  setCurrentUser: Dispatch<SetStateAction<IUser | null>>;
+  currentUser: ICurrentUser | null;
+  setCurrentUser: Dispatch<SetStateAction<ICurrentUser | null>>;
   signIn: ({ identifier, password }: IUserSignIn) => Promise<void>;
   signOut: () => void;
-  signUp: () => void;
+  signUp: (params: IUser) => void;
 };
 
 const AuthContext = createContext({} as AuthContextProps);
 
 export const AuthProvider = ({ children }: any) => {
-  const [currentUser, setCurrentUser] = useState<IUser | null>(null);
-  const user: IUser = {
-    name: 'Conta Teste',
-    username: 'teste',
-    email: 'teste@gmail.com',
-    password: '123456',
-    phone_number: '82999999999'
-  };
+  const [currentUser, setCurrentUser] = useState<ICurrentUser | null>(null);
 
   const signIn = async ({ identifier, password }: IUserSignIn) => {
-    if (
-      identifier === '82999999999' ||
-      identifier === 'teste@gmail.com' ||
-      identifier === 'teste'
-    ) {
-      if (password === '123456') {
+    UserService.login({ identifier, password })
+      .then(async (user: any) => {
         setCurrentUser(user);
         await AsyncStorage.setItem('twitter.currentUser', JSON.stringify(user));
-      }
-    }
+      })
   }
 
   const signOut = async () => {
-    setCurrentUser(null);
-    await AsyncStorage.removeItem('twitter.currentUser');
+    UserService.logout()
+      .then(async () => {
+        setCurrentUser(null);
+        await AsyncStorage.removeItem('twitter.currentUser');
+      });
   }
 
-  const signUp = async () => {
-    setCurrentUser(user);
-    await AsyncStorage.setItem('twitter.currentUser', JSON.stringify(user));
+  const signUp = async (params: IUser) => {
+    UserService.create(params)
+      .then(async (user: any) => {
+        console.log(user)
+        setCurrentUser(user)
+        await AsyncStorage.setItem('twitter.currentUser', JSON.stringify(user));
+      })
+      .catch(console.error);
   }
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
-      new Promise(resolve => setTimeout(resolve, 1000));
-      setCurrentUser(JSON.parse(await AsyncStorage.getItem('twitter.currentUser') || 'null') as IUser | null);
+      const current = await UserService.currentUser();
+      setCurrentUser(current);
     }
     fetchCurrentUser();
-  }, []);
+  }, [currentUser]);
   return (
     <AuthContext.Provider
       value={{

@@ -3,7 +3,7 @@ import normalize from 'react-native-normalize';
 import { Formik } from 'formik';
 import { Input, Button } from 'react-native-elements';
 import { useAuth } from '../../contexts/Auth';
-import { IUserSignIn } from '../../types/user.types';
+import { IUserSignIn } from '../../@types/user.types';
 
 export default function SignIn({ navigation }: any) {
   const { signIn } = useAuth();
@@ -47,7 +47,7 @@ export default function SignIn({ navigation }: any) {
                   <Text>Esqueceu a senha?</Text>
                 </TouchableOpacity>
                 <Button
-                  onPress={handleSubmit}
+                  onPress={(e: any) => handleSubmit(e)}
                   title='Entrar'
                   buttonStyle={styles.formBtn}
                 />

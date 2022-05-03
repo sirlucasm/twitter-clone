@@ -1,3 +1,4 @@
+import './src/api/settings';
 import Index from './src';
 import { AuthProvider } from './src/contexts/Auth';
 
