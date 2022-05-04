@@ -17,8 +17,9 @@
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/native-stack": "^6.5.2",
     "@types/react-native-dotenv": "^0.2.0",
-    "expo": "~44.0.0",
+    "expo": "^44.0.6",
     "expo-status-bar": "~1.2.0",
+    "expo-updates": "~0.11.7",
     "firebase": "^9.7.0",
     "formik": "^2.2.9",
     "react": "17.0.1",
@@ -31,12 +32,12 @@
     "react-native-reanimated": "~2.3.1",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
+    "react-native-toast-message": "^2.1.5",
     "react-native-uuid": "^2.0.1",
     "react-native-vector-icons": "^9.1.0",
     "react-native-web": "0.17.1",
     "styled-components": "^5.3.5",
-    "yup": "^0.32.11",
-    "expo-updates": "~0.11.7"
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

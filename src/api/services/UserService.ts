@@ -1,8 +1,8 @@
-import { Firestore, addDoc, collection, getDoc } from 'firebase/firestore';
+import { Firestore, addDoc, collection, getDoc, FirestoreError } from 'firebase/firestore';
 import { Auth, getAuth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword } from 'firebase/auth';
 import { db } from '../settings';
-import uuid from 'react-native-uuid';
 import { IUser, IUserSignIn } from '../../@types/user.types';
+import { getTranslation } from '../../utils/FirebaseErrorTranslate';
 
 class UserService {
   private path: string = 'users';
@@ -21,8 +21,9 @@ class UserService {
 
       return userCreated;
     }
-    catch (error) {
-      return Promise.reject(error);
+    catch (err: any) {
+      const error: FirestoreError = err;
+      return Promise.reject(getTranslation(error.code));
     }
   }
 
@@ -31,8 +32,9 @@ class UserService {
       const userLogged = await signInWithEmailAndPassword(this.auth, identifier, password);
       return userLogged;
     }
-    catch (error) {
-      return Promise.reject(error);
+    catch (err: any) {
+      const error: FirestoreError = err;
+      return Promise.reject(getTranslation(error.code));
     }
   }
 
@@ -40,8 +42,9 @@ class UserService {
     try {
       return await this.auth.signOut();
     }
-    catch (error) {
-      return Promise.reject(error);
+    catch (err: any) {
+      const error: FirestoreError = err;
+      return Promise.reject(getTranslation(error.code));
     }
   }
 
