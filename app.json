@@ -1,6 +1,7 @@
 {
   "expo": {
-    "name": "twitter-clone",
+    "name": "Twitter Clone",
+    "description": "Programming Laboratory Academic project",
     "slug": "twitter-clone",
     "version": "1.0.0",
     "orientation": "portrait",
