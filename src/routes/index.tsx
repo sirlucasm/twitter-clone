@@ -1,8 +1,8 @@
 import { NavigationContainer } from '@react-navigation/native';
 import Loading from '../components/Loading';
 import { useAuth } from '../contexts/Auth';
+import MainDrawerRoute from './drawer';
 import MainStackRoute from './stack';
-import TabRoute from './tab';
 
 const Routes = () => {
   const { signed, isLoading } = useAuth();
@@ -10,7 +10,7 @@ const Routes = () => {
     <NavigationContainer>
       {
         signed ?
-        <TabRoute />
+        <MainDrawerRoute />
         :
         <MainStackRoute />
       }

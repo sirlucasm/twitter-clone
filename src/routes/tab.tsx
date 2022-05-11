@@ -5,7 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
 
-const MainStackRoute = () => {
+const MainTabRoute = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -22,12 +22,36 @@ const MainStackRoute = () => {
         tabBarShowLabel: false,
       })}
     >
-      <Tab.Screen name="Timeline" component={Timeline} />
-      <Tab.Screen name="Search" component={Timeline} />
-      <Tab.Screen name="Notifications" component={Timeline} />
-      <Tab.Screen name="Messages" component={Timeline} />
+      <Tab.Screen
+        name="Timeline"
+        component={Timeline}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Tab.Screen
+        name="Search"
+        component={Timeline}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Tab.Screen
+        name="Notifications"
+        component={Timeline}
+        options={{
+          headerTitle: 'Notificações'
+        }}
+      />
+      <Tab.Screen
+        name="Messages"
+        component={Timeline}
+        options={{
+          headerTitle: 'Mensagens'
+        }}
+      />
     </Tab.Navigator>
   );
 }
 
-export default MainStackRoute;
+export default MainTabRoute;
