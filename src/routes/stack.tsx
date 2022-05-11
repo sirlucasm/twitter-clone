@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Welcome from '../screens';
 import SignIn from '../screens/auth/signin';
 import SignUp from '../screens/auth/signup';
+import ForgotPassword from '../screens/forgotPassword';
 
 const MainStackRoute = () => {
   return (
@@ -25,6 +26,13 @@ const MainStackRoute = () => {
       <Stack.Screen
         name='SignUp'
         component={SignUp}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name='ForgotPassword'
+        component={ForgotPassword}
         options={{
           headerShown: false
         }}

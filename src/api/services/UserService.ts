@@ -1,5 +1,12 @@
 import { Firestore, addDoc, collection, getDoc, FirestoreError } from 'firebase/firestore';
-import { Auth, getAuth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword } from 'firebase/auth';
+import {
+  Auth,
+  getAuth,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail
+} from 'firebase/auth';
 import { db } from '../settings';
 import { IUser, IUserSignIn } from '../../@types/user.types';
 import { getTranslation } from '../../utils/FirebaseErrorTranslate';
@@ -50,6 +57,16 @@ class UserService {
 
   async currentUser() {
     return this.auth.currentUser
+  }
+
+  async sendForgotPasswordEmail(email: string) {
+    try {
+      return await sendPasswordResetEmail(this.auth, email);
+    }
+    catch (err: any) {
+      const error: FirestoreError = err;
+      return Promise.reject(getTranslation(error.code));
+    }
   }
 }
 

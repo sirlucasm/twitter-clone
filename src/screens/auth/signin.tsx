@@ -43,7 +43,7 @@ export default function SignIn({ navigation }: any) {
                 value={values.password}
               />
               <View style={styles.formBtnArea}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
                   <Text>Esqueceu a senha?</Text>
                 </TouchableOpacity>
                 <Button
