@@ -6,9 +6,15 @@ export interface IUser {
   email: string;
   password: string;
   phone_number?: string;
+  profilePicture: string;
+  backgroundPicture: string;
+  followers: [];
+  following: []
+  tweets: []
+  uid: string;
 }
 
-export interface ICurrentUser extends User {}
+export type ICurrentUser = User & IUser;
 
 export interface IUserSignIn {
   identifier: string;

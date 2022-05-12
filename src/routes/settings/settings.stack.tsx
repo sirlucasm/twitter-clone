@@ -1,14 +1,14 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Timeline from '../../screens/timeline';
+import Settings from '../../screens/settings';
 
 const Stack = createNativeStackNavigator();
 
-const TimelineStackRoute = () => {
+const SettingsStackRoute = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name='TimelineStack'
-        component={Timeline}
+        name='SettingsStack'
+        component={Settings}
         options={{
           headerShown: false
         }}
@@ -19,4 +19,4 @@ const TimelineStackRoute = () => {
 
 
 
-export { TimelineStackRoute };
+export { SettingsStackRoute };

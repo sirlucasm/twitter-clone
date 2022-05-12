@@ -7,7 +7,7 @@ const ProfileStackRoute = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name='Timeline'
+        name='ProfileStack'
         component={Profile}
         options={{
           headerShown: false
