@@ -51,7 +51,9 @@ class UserService {
   async login({ password, identifier }: IUserSignIn) {
     try {
       const userLogged = await signInWithEmailAndPassword(this.auth, identifier, password);
-      return userLogged;
+      const docRef = doc(this.db, 'users', userLogged.user.uid);
+      const userSnapshot = await getDoc(docRef);
+      return { ...userLogged, ...userSnapshot.data() };
     }
     catch (err: any) {
       const error: FirestoreError = err;
