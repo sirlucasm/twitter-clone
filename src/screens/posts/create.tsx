@@ -89,7 +89,7 @@ export default function CreatePost({ route, navigation }: CreatePostProps) {
           icon={<Ionicons name="attach" size={28} color="#3d3d3d" />}
           type="clear"
         />
-        { image && <Image source={{ uri: image }} style={styles.attachedImage} /> }
+        { !!image && <Image source={{ uri: image }} style={styles.attachedImage} /> }
       </View>
     </Container>
   );

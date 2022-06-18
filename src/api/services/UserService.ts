@@ -1,4 +1,4 @@
-import { Firestore, getDoc, FirestoreError, collection, doc, setDoc, updateDoc, } from 'firebase/firestore';
+import { Firestore, getDoc, FirestoreError, collection, doc, setDoc, updateDoc, query, orderBy, startAt, endAt, getDocs, } from 'firebase/firestore';
 import {
   Auth,
   getAuth,
@@ -8,7 +8,7 @@ import {
   sendPasswordResetEmail
 } from 'firebase/auth';
 import { db } from '../settings';
-import { IUser, IUserSignIn } from '../../@types/user.types';
+import { ICurrentUser, IUser, IUserSignIn } from '../../@types/user.types';
 import { getTranslation } from '../../utils/FirebaseErrorTranslate';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FirebaseStorage, getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
@@ -117,6 +117,17 @@ class UserService {
     const snapshot = await uploadBytes(storageRef, imageBlob);
     const downloadURL = await getDownloadURL(snapshot.ref);
     return downloadURL;
+  }
+
+  async searchUsers(searchQuery: string) {
+    const colRef = collection(this.db, 'users');
+    const q = query(colRef, orderBy('name'));
+
+    const userSnapshot = await getDocs(q);
+    const users: ICurrentUser[] = [];
+    userSnapshot.forEach(res => users.push(res.data() as ICurrentUser));
+
+    return users.filter((data) => data.name.toLowerCase().includes(searchQuery));
   }
 }
 
