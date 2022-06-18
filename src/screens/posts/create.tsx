@@ -18,7 +18,7 @@ interface CreatePostProps {
 export default function CreatePost({ route, navigation }: CreatePostProps) {
   const { setIsLoading } = useAuth();
   const [text, setText] = useState('');
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState('');
   const { currentUser } = route.params;
 
   const handleTweet = async () => {

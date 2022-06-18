@@ -52,7 +52,7 @@ export default function Timeline({ navigation }: any) {
                 uri: item.createdBy.profilePicture,
               }}
               size='medium'
-              onPress={() => navigation.navigate('Profile', item.createdBy)}
+              onPress={() => navigation.navigate('ProfileStack', item.createdBy)}
             />
             <View style={styles.tweetArea}>
               {

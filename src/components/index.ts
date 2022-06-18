@@ -15,4 +15,6 @@ export const Header = styled(View)`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  border-bottom-width: 1px;
+  border-bottom-color: #ececec;
 `;

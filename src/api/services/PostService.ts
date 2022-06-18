@@ -40,14 +40,16 @@ class PostService {
       params.image = downloadURL;
     }
     const docRef = doc(collection(this.db, 'posts'));
-      await setDoc(docRef, {
-        id: docRef.id,
-        likes: [],
-        retweets: [],
-        comments: [],
-        createAt: new Date(),
-        ...newParams
-      });
+    const userDocRef = doc(this.db, 'users', params.createdBy.uid);
+    await updateDoc(userDocRef, { tweets: [ docRef.id ] });
+    await setDoc(docRef, {
+      id: docRef.id,
+      likes: [],
+      retweets: [],
+      comments: [],
+      createAt: new Date(),
+      ...newParams
+    });
 
     const postSnapshot = await getDoc(docRef);
     return postSnapshot.data();

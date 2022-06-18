@@ -1,4 +1,4 @@
-import { Firestore, getDoc, FirestoreError, collection, doc, setDoc, } from 'firebase/firestore';
+import { Firestore, getDoc, FirestoreError, collection, doc, setDoc, updateDoc, } from 'firebase/firestore';
 import {
   Auth,
   getAuth,
@@ -10,15 +10,19 @@ import {
 import { db } from '../settings';
 import { IUser, IUserSignIn } from '../../@types/user.types';
 import { getTranslation } from '../../utils/FirebaseErrorTranslate';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FirebaseStorage, getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 
 class UserService {
   private path: string = 'users';
   private db: Firestore;
   private auth: Auth;
+  private storage: FirebaseStorage;
 
   constructor() {
     this.db = db;
     this.auth = getAuth();
+    this.storage = getStorage();
   }
 
   async create({ email, password, name, username }: IUser) {
@@ -72,7 +76,12 @@ class UserService {
   }
 
   async currentUser() {
-    return this.auth.currentUser
+    const authUser: any = this.auth.currentUser;
+    if (authUser) {
+      const docRef = doc(this.db, 'users', authUser.uid);
+      const userSnapshot = await getDoc(docRef);
+      return { ...authUser, ...userSnapshot.data() };
+    } return undefined;
   }
 
   async sendForgotPasswordEmail(email: string) {
@@ -83,6 +92,31 @@ class UserService {
       const error: FirestoreError = err;
       return Promise.reject(getTranslation(error.code));
     }
+  }
+
+  async update(
+    userId: string,
+    params: {
+      name?: string, username?: string, profilePicture?: string
+    }
+  ) {
+    const userPfpcUrl = await this.uploadImage(params.profilePicture || '', userId);
+    params.profilePicture = userPfpcUrl;
+    const docRef = doc(this.db, 'users', userId);
+    const user = await updateDoc(docRef, params);
+
+    await AsyncStorage.setItem('twitter.currentUser', JSON.stringify(await this.currentUser()));
+    return user;
+  }
+
+  async uploadImage(imageUri: string, userId: string) {
+    if (!imageUri) return ''
+    const image = await fetch(imageUri);
+    const imageBlob = await image.blob();
+    const storageRef = ref(this.storage, `users/${userId}`);
+    const snapshot = await uploadBytes(storageRef, imageBlob);
+    const downloadURL = await getDownloadURL(snapshot.ref);
+    return downloadURL;
   }
 }
 

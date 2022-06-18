@@ -1,4 +1,4 @@
-import { IUser } from "./user.types";
+import { ICurrentUser } from "./user.types";
 
 export interface IPost {
   id?: string;
@@ -7,11 +7,11 @@ export interface IPost {
   likes: [];
   retweets: [];
   comments: [];
-  createdBy: IUser;
+  createdBy: ICurrentUser;
 }
 
 export interface IPostParams {
   text?: string;
   image?: string;
-  createdBy: IUser;
+  createdBy: ICurrentUser;
 }

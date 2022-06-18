@@ -15,7 +15,7 @@ export const DrawerContent = (props: DrawerContentComponentProps) => {
           uri: currentUser?.profilePicture,
         }}
         size='medium'
-        onPress={() => props.navigation.navigate('Profile')}
+        onPress={() => props.navigation.navigate('ProfileDrawer')}
       />
       <View style={styles.userInfoNames}>
         <Text style={{ fontWeight: 'bold' }}>{currentUser?.name}</Text>
