@@ -1,128 +1,45 @@
+import { useEffect, useState } from 'react';
 import { FlatList, Image, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import normalize from 'react-native-normalize';
 import { Button, Avatar, Divider, FAB } from 'react-native-elements';
 import { Container, Header } from '../components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useAuth } from '../contexts/Auth';
+import PostService from '../api/services/PostService';
+import { IPost } from '../@types/post.types';
 
 export default function Timeline({ navigation }: any) {
+  const [refreshing, setRefreshing] = useState(false);
+  const [posts, setPosts] = useState<IPost[]>([]);
   const { currentUser } = useAuth();
   const handleDrawer = () => {
     navigation.openDrawer();
   }
 
-  const TWEETS = [
-    {
-      id: 'sad321sdf213ds234g.asd2dfas3213e',
-      text: `Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.`,
-      image: {
-        uri: 'https://www.techreviews.com.br/wp-content/uploads/2020/04/VZI-0-monitor-hd-davidx-rq7e1qwspey-unsplash-scaled.jpg',
-        type: 'image/jpeg'
-      },
-      likes: [
-        {
-          uid: 'as6d5a76576d.dafd7f677',
-          name: 'Teste 1',
-          username: 'teste1',
-          email: 'teste1@gmail.com',
-          profilePicture: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'
-        },
-        {
-          uid: 'as6d5a76576d.dafd7f677',
-          name: 'Lucas Matheus',
-          username: 'sirlucasm',
-          email: 'lucasmatheus2021@gmail.com',
-          profilePicture: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'
-        },
-        {
-          uid: 'as6d5a76576d.dafd7f677',
-          name: 'Teste 2',
-          username: 'teste2',
-          email: 'teste2@gmail.com',
-          profilePicture: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'
-        }
-      ],
-      retweets: [
-        {
-          uid: 'as6d5a76576d.dafd7f677',
-          name: 'Teste 1',
-          username: 'teste1',
-          email: 'teste1@gmail.com',
-          profilePicture: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'
-        },
-        {
-          uid: 'as6d5a76576d.dafd7f677',
-          name: 'Teste 2',
-          username: 'teste2',
-          email: 'teste2@gmail.com',
-          profilePicture: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'
-        }
-      ],
-      comments: [],
-      createdBy: {
-        uid: 'as6d5a76576d.dafd7f677',
-        name: 'Lucas Matheus',
-        username: 'sirlucasm',
-        email: 'lucasmatheus2021@gmail.com',
-        profilePicture: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'
-      }
-    },
-    {
-      id: 'dsd3224sd7asd67.dasd87867das65d675',
-      text: ``,
-      image: {
-        uri: 'https://geekblog.com.br/wp-content/uploads/2021/01/7fea175e13ba4a4b29672d15b2497367.jpg',
-        type: 'image/jpeg'
-      },
-      likes: [
-        {
-          uid: 'as6d5a76576d.dafd7f677',
-          name: 'Teste 1',
-          username: 'teste1',
-          email: 'teste1@gmail.com',
-          profilePicture: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'
-        },
-        {
-          uid: 'as6d5a76576d.dafd7f677',
-          name: 'Lucas Matheus',
-          username: 'sirlucasm',
-          email: 'lucasmatheus2021@gmail.com',
-          profilePicture: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'
-        },
-        {
-          uid: 'as6d5a76576d.dafd7f677',
-          name: 'Teste 2',
-          username: 'teste2',
-          email: 'teste2@gmail.com',
-          profilePicture: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'
-        }
-      ],
-      retweets: [
-        {
-          uid: 'as6d5a76576d.dafd7f677',
-          name: 'Teste 1',
-          username: 'teste1',
-          email: 'teste1@gmail.com',
-          profilePicture: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'
-        },
-        {
-          uid: 'as6d5a76576d.dafd7f677',
-          name: 'Teste 2',
-          username: 'teste2',
-          email: 'teste2@gmail.com',
-          profilePicture: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'
-        }
-      ],
-      comments: [],
-      createdBy: {
-        uid: 'as6d5a76576d.dafd7f677',
-        name: 'Lucas Matheus',
-        username: 'sirlucasm',
-        email: 'lucasmatheus2021@gmail.com',
-        profilePicture: 'https://instagram.fmcz9-1.fna.fbcdn.net/v/t51.2885-19/211551140_796875311012805_188347745712073640_n.jpg?stp=dst-jpg_s150x150&_nc_ht=instagram.fmcz9-1.fna.fbcdn.net&_nc_cat=109&_nc_ohc=NXxdxdeLuh8AX8ZYnAU&edm=ALbqBD0BAAAA&ccb=7-4&oh=00_AT8Msq8xJSIOazYhqCeYJ31kkyjk9ETKQLvCSdd7IhQVdQ&oe=6282ACD4&_nc_sid=9a90d6'
-      }
+  const fetchPosts = async () => {
+    setRefreshing(true);
+    PostService.all()
+      .then(data => {
+        setPosts(data);
+      })
+      .finally(() => setRefreshing(false));
+  }
+
+  const handleLikePost = async (docId: string, userId: string, likes: string[]) => {
+    if (postAlreadyLiked(likes)) await PostService.unlikePost({ docId, userId, likes });
+    else await PostService.likePost({ docId, userId });
+
+    await fetchPosts();
+  }
+
+  const postAlreadyLiked = (likes: string[]) => likes.includes(currentUser?.uid || '');
+
+  useEffect(() => {
+    fetchPosts();
+    return () => {
+      setPosts([]);
     }
-  ];
+  }, []);
 
   const renderFlatItems = ({ item }: { item: any }) => {
     return (
@@ -142,7 +59,7 @@ export default function Timeline({ navigation }: any) {
                 !!item.text && <Text>{item.text}</Text>
               }
               {
-                !!item.image.uri && <Image source={{ uri: item.image.uri}} style={styles.tweetImg} />
+                !!item.image && <Image source={{ uri: item.image }} style={styles.tweetImg} />
               }
               <View style={styles.tweetsButtons}>
                 <TouchableOpacity style={styles.btnItemNumbers}>
@@ -153,8 +70,15 @@ export default function Timeline({ navigation }: any) {
                   <Ionicons name='reload-outline' size={22} />
                   <Text style={{ marginLeft: 4 }}>{item.retweets.length}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btnItemNumbers}>
-                  <Ionicons name='heart-outline' size={22} />
+                <TouchableOpacity
+                  style={styles.btnItemNumbers}
+                  onPress={() => handleLikePost(item.id, item.createdBy.uid, item.likes)}
+                >
+                  <Ionicons
+                    name={item.likes.includes(currentUser?.uid) ? 'heart' : 'heart-outline'}
+                    size={22}
+                    color={item.likes.includes(currentUser?.uid) ? '#de2a2a': '#000'}
+                  />
                   <Text style={{ marginLeft: 4 }}>{item.likes.length}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity>
@@ -185,16 +109,18 @@ export default function Timeline({ navigation }: any) {
         </View>
         <View>
           <Button
-            onPress={() => navigation.navigate('Settings')}
+            onPress={() => navigation.navigate('SettingsDrawer')}
             icon={<Ionicons name="cog" size={28} color="#3d3d3d" />}
             type="clear"
           />
         </View>
       </Header>
       <FlatList
-        data={TWEETS}
+        data={posts}
         renderItem={renderFlatItems}
-        keyExtractor={item => item.id}
+        keyExtractor={(item: any) => item.id}
+        onRefresh={fetchPosts}
+        refreshing={refreshing}
       />
       <FAB
         title=""
@@ -202,6 +128,7 @@ export default function Timeline({ navigation }: any) {
         placement='right'
         color="#1da1f2"
         buttonStyle={{ borderRadius: 50 }}
+        onPress={() => navigation.navigate('CreatePost', { currentUser })}
       />
     </Container>
   )

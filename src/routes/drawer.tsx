@@ -9,22 +9,22 @@ const Drawer = createDrawerNavigator();
 const MainDrawerRoute = () => {
   return (
     <Drawer.Navigator
-      initialRouteName="Timeline"
+      initialRouteName="TimelineDrawer"
       screenOptions={{ headerShown: false, }}
       drawerContent={(props: DrawerContentComponentProps) => <DrawerContent {...props} />}
     >
       <Drawer.Screen
-        name="Timeline"
+        name="TimelineDrawer"
         options={{ title: "Inicio" }}
         component={MainTabRoute}
       />
       <Drawer.Screen
-        name="Profile"
+        name="ProfileDrawer"
         options={{ title: "Perfil" }}
         component={ProfileStackRoute}
       />
       <Drawer.Screen
-        name="Settings"
+        name="SettingsDrawer"
         options={{ title: "Configurações" }}
         component={SettingsStackRoute}
       />

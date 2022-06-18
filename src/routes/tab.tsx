@@ -2,6 +2,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Timeline from '../screens/timeline';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { TimelineStackRoute } from './timeline/timeline.stack';
 
 const Tab = createBottomTabNavigator();
 
@@ -24,7 +25,7 @@ const MainTabRoute = () => {
     >
       <Tab.Screen
         name="Timeline"
-        component={Timeline}
+        component={TimelineStackRoute}
         options={{
           headerShown: false
         }}

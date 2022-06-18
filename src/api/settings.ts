@@ -7,7 +7,7 @@ import {
   FIREBASE_APP_ID
 } from '@env';
 
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
 
 const appConfig = {
@@ -19,7 +19,10 @@ const appConfig = {
   appId: FIREBASE_APP_ID
 };
 
-export const app = initializeApp(appConfig);
-export const db = getFirestore(app);
+if (!getApps().length) {
+  initializeApp(appConfig);
+}
+
+export const db = getFirestore();
 
 console.log('✔️ Initialized Firebase Application');
