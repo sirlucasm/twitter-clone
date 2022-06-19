@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import { useEffect, useRef, useState } from 'react';
 import { FlatList, Image, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, Share } from 'react-native';
 import normalize from 'react-native-normalize';
 import { Button, Avatar, Divider, FAB } from 'react-native-elements';
@@ -7,11 +9,17 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useAuth } from '../contexts/Auth';
 import PostService from '../api/services/PostService';
 import { IPost } from '../@types/post.types';
+import NotificationService from '../api/services/NotificationService';
 
 export default function Timeline({ navigation }: any) {
   const [refreshing, setRefreshing] = useState(false);
   const [posts, setPosts] = useState<IPost[]>([]);
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef<any>();
+  const responseListener = useRef<any>();
   const { currentUser } = useAuth();
+
   const handleDrawer = () => {
     navigation.openDrawer();
   }
@@ -25,11 +33,23 @@ export default function Timeline({ navigation }: any) {
       .finally(() => setRefreshing(false));
   }
 
-  const handleLikePost = async (docId: string, userId: string, likes: string[]) => {
-    if (postAlreadyLiked(likes)) await PostService.unlikePost({ docId, userId, likes });
-    else await PostService.likePost({ docId, userId });
-
-    await fetchPosts();
+  const handleLikePost = async (docId: string, user: any, likes: string[]) => {
+    if (postAlreadyLiked(likes)) {
+      await PostService.unlikePost({ docId, userId: user.uid, likes });
+      await fetchPosts();
+    }
+    else {
+      await PostService.likePost({ docId, userId: user.uid });
+      await fetchPosts();
+      await NotificationService.create({
+        byUser: currentUser,
+        toUser: user,
+        message: 'curtiu sua postagem',
+        post: docId,
+        notificationToken: expoPushToken
+      })
+      await sendPushNotification();
+    }
   }
 
   const postAlreadyLiked = (likes: string[]) => likes.includes(currentUser?.uid || '');
@@ -53,10 +73,45 @@ export default function Timeline({ navigation }: any) {
     }
   };
 
+  async function sendPushNotification() {
+    const message = {
+      to: expoPushToken,
+      sound: 'default',
+      title: 'Nova curtida',
+      body: 'Você ganhou uma nova curtida!',
+      data: { someData: 'goes here' },
+    };
+
+    await fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-encoding': 'gzip, deflate',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(message),
+    });
+  }
+
   useEffect(() => {
+    NotificationService.registerForPushNotificationsAsync().then((token:any) => setExpoPushToken(token));
+
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current = Notifications.addNotificationReceivedListener((notification: any) => {
+      setNotification(notification);
+    });
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+
     fetchPosts();
+
     return () => {
       setPosts([]);
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
     }
   }, []);
 
@@ -91,7 +146,7 @@ export default function Timeline({ navigation }: any) {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.btnItemNumbers}
-                  onPress={() => handleLikePost(item.id, item.createdBy.uid, item.likes)}
+                  onPress={() => handleLikePost(item.id, item.createdBy, item.likes)}
                 >
                   <Ionicons
                     name={item.likes.includes(currentUser?.uid) ? 'heart' : 'heart-outline'}

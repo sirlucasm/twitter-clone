@@ -4,6 +4,7 @@ import Timeline from '../screens/timeline';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { TimelineStackRoute } from './timeline/timeline.stack';
 import Search from '../screens/search';
+import Notification from './notification';
 
 const Tab = createBottomTabNavigator();
 
@@ -40,16 +41,9 @@ const MainTabRoute = () => {
       />
       <Tab.Screen
         name="Notifications"
-        component={Timeline}
+        component={Notification}
         options={{
           headerTitle: 'Notificações'
-        }}
-      />
-      <Tab.Screen
-        name="Messages"
-        component={Timeline}
-        options={{
-          headerTitle: 'Mensagens'
         }}
       />
     </Tab.Navigator>

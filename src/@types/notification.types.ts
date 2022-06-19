@@ -1,15 +1,19 @@
-import { ICurrentUser } from "./user.types";
+import { ICurrentUser, IUser } from "./user.types";
 
 export interface INotification {
   id?: string;
   message: string;
-  byUser: ICurrentUser;
-  toUser: ICurrentUser;
-  createdAt: number;
+  byUser: ICurrentUser | null;
+  toUser: ICurrentUser | null;
+  post?: string;
+  notificationToken: string;
+  createAt: Date;
 }
 
 export interface INotificationParams {
   message: string;
-  byUser: ICurrentUser;
-  toUser: ICurrentUser;
+  byUser: ICurrentUser | null;
+  toUser: ICurrentUser | null;
+  post?: string;
+  notificationToken: string;
 }
