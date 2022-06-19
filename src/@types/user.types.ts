@@ -12,6 +12,7 @@ export interface IUser {
   following: []
   tweets: []
   uid: string;
+  biography?: string;
 }
 
 export type ICurrentUser = User & IUser;

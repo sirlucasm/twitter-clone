@@ -1,5 +1,6 @@
 import { createDrawerNavigator, DrawerContentComponentProps } from '@react-navigation/drawer';
 import { DrawerContent } from '../components/Drawer';
+import Profile from '../screens/profile';
 import { ProfileStackRoute } from './profile/profile.stack';
 import { SettingsStackRoute } from './settings/settings.stack';
 import MainTabRoute from './tab';
@@ -21,7 +22,7 @@ const MainDrawerRoute = () => {
       <Drawer.Screen
         name="ProfileDrawer"
         options={{ title: "Perfil" }}
-        component={ProfileStackRoute}
+        component={Profile}
       />
       <Drawer.Screen
         name="SettingsDrawer"

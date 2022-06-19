@@ -39,10 +39,10 @@ export const AuthProvider = ({ children }: any) => {
 
   const signOut = async () => {
     setIsLoading(true);
+    await AsyncStorage.removeItem('twitter.currentUser');
     UserService.logout()
       .then(async () => {
         setCurrentUser(null);
-        await AsyncStorage.removeItem('twitter.currentUser');
       })
       .finally(() => setIsLoading(false));
   }

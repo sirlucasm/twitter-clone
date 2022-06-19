@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FlatList, Image, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, Share } from 'react-native';
 import normalize from 'react-native-normalize';
 import { Button, Avatar, Divider, FAB } from 'react-native-elements';
 import { Container, Header } from '../components';
@@ -34,6 +34,25 @@ export default function Timeline({ navigation }: any) {
 
   const postAlreadyLiked = (likes: string[]) => likes.includes(currentUser?.uid || '');
 
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: 'Twitter Clone - study app',
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error: any) {
+      alert(error.message);
+    }
+  };
+
   useEffect(() => {
     fetchPosts();
     return () => {
@@ -52,7 +71,7 @@ export default function Timeline({ navigation }: any) {
                 uri: item.createdBy.profilePicture,
               }}
               size='medium'
-              onPress={() => navigation.navigate('ProfileStack', item.createdBy)}
+              onPress={() => navigation.navigate('ProfileDrawer', { profile: item.createdBy })}
             />
             <View style={styles.tweetArea}>
               {
@@ -81,7 +100,7 @@ export default function Timeline({ navigation }: any) {
                   />
                   <Text style={{ marginLeft: 4 }}>{item.likes.length}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={onShare}>
                   <Ionicons name='share-social-outline' size={22} />
                 </TouchableOpacity>
               </View>

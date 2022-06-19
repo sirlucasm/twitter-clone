@@ -7,7 +7,8 @@ import {
   getDocs,
   query,
   orderBy,
-  updateDoc
+  updateDoc,
+  where
 } from 'firebase/firestore';
 import {
   Auth,
@@ -79,6 +80,14 @@ class PostService {
       likes: newLikesArr
     });
     return post;
+  }
+
+  async postsById(userId: string) {
+    const q = query(collection(this.db, 'posts'), where('createdBy.uid', '==', userId), orderBy('createAt', 'desc'));
+    const postSnapshot = await getDocs(q);
+    const posts: IPost[] = [];
+    postSnapshot.forEach(res => posts.push(res.data() as IPost));
+    return posts;
   }
 }
 
