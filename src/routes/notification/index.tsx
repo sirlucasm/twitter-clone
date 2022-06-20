@@ -10,6 +10,10 @@ import { INotification } from "../../@types/notification.types";
 import NotificationService from "../../api/services/NotificationService";
 import { Container } from "../../components";
 import { useAuth } from "../../contexts/Auth";
+import {
+  AdMobInterstitial,
+  setTestDeviceIDAsync
+} from 'expo-ads-admob';
 
 export default function Notification() {
   const { currentUser } = useAuth();
@@ -20,8 +24,19 @@ export default function Notification() {
     setNotifications(data);
   }
 
+  const showAdMobInterstitial = async () => {
+    await setTestDeviceIDAsync('EMULATOR');
+    await AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712');
+    await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true});
+    await AdMobInterstitial.showAdAsync();
+  }
+
   useEffect(() => {
     fetchNotifications();
+
+    // Display an interstitial
+    showAdMobInterstitial();
+
     return () => {
       setNotifications([]);
     }

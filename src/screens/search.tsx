@@ -2,7 +2,8 @@ import {
   View,
   StyleSheet,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView
 } from 'react-native';
 import { Container } from '../components';
 import { Input, Avatar } from 'react-native-elements';
@@ -10,7 +11,10 @@ import { useState } from 'react';
 import UserService from '../api/services/UserService';
 import { ICurrentUser } from '../@types/user.types';
 import { useAuth } from '../contexts/Auth';
-import { ScrollView } from 'react-native-gesture-handler';
+import {
+  PublisherBanner,
+  AdMobBanner
+} from 'expo-ads-admob';
 
 export default function Search() {
   const { setIsLoading } = useAuth();
@@ -54,6 +58,10 @@ export default function Search() {
           ))
         }
       </ScrollView>
+      <PublisherBanner
+        bannerSize="fullBanner"
+        adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
+      />
     </Container>
   );
 }
