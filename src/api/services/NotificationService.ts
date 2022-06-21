@@ -43,7 +43,13 @@ class NotificationService {
   }
 
   async all(userId: string) {
-    const q = query(collection(this.db, 'notifications'), where('toUser.uid', '==', userId), orderBy('createAt', 'desc'));
+    const q = query(
+      collection(this.db, 'notifications'),
+      where('toUser.uid', '==', userId),
+      where('byUser.uid', '!=', userId),
+      orderBy('byUser.uid', 'asc'),
+      orderBy('createAt', 'desc')
+    );
     const notificationSnapshot = await getDocs(q);
     const notifications: INotification[] = [];
     notificationSnapshot.forEach(res => notifications.push(res.data() as INotification));

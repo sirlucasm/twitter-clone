@@ -16,7 +16,7 @@ import {
   AdMobBanner
 } from 'expo-ads-admob';
 
-export default function Search() {
+export default function Search({ navigation }: any) {
   const { setIsLoading } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchedData, setSearchedData] = useState<ICurrentUser[]>([]);
@@ -42,7 +42,11 @@ export default function Search() {
       <ScrollView>
         {
           searchedData.map((user, i) => (
-            <TouchableOpacity key={i} style={styles.profilesButton}>
+            <TouchableOpacity
+              key={i}
+              style={styles.profilesButton}
+              onPress={() => navigation.navigate('ProfileDrawer', { profile: user })}
+            >
               <Avatar
                 rounded
                 source={{
